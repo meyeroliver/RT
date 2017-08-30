@@ -1,0 +1,10 @@
+Scene My_World_1
+
+Camera
+37 13 40
+Image_plane
+150 50
+Light_source
+140 10 -2 5 *
+Sphere
+120 40 -100 10 -
