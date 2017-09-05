@@ -3,60 +3,105 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdube <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: akhanye <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/05/21 10:24:59 by sdube             #+#    #+#             */
-/*   Updated: 2017/07/11 10:30:22 by omeyer           ###   ########.fr       */
+/*   Created: 2017/06/24 23:24:44 by akhanye           #+#    #+#             */
+/*   Updated: 2017/07/30 10:23:58 by akhanye          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		read_to_storage(int const fd, char **storage)
+static char		*get_line(char *buff, int *r, char **left, char *send)
 {
-	char	*buffer;
-	char	*tmp;
-	int		bytes_read;
+	char	*temp;
+	char	ttemp[ft_strlen(buff)];
 
-	if (!(buffer = (char *)malloc(sizeof(*buffer) * (BUFF_SIZE + 1))))
-		return (-1);
-	bytes_read = read(fd, buffer, BUFF_SIZE);
-	if (bytes_read > 0)
+	temp = send;
+	*r = -1;
+	if (ft_strchr(buff, '\n') == NULL)
+		return (ft_strcat(temp, buff));
+	*r = ft_strchr(buff, '\n') - buff;
+	if (*r == 0)
+		ft_strcat(temp, "");
+	else
+		ft_strncat(temp, buff, *r);
+	if (buff[*r + 1] != '\0')
 	{
-		buffer[bytes_read] = '\0';
-		tmp = ft_strjoin(*storage, buffer);
-		free(*storage);
-		*storage = tmp;
+		ft_strcpy(ttemp, buff + (*r + 1));
+		free((*left));
+		(*left) = ft_strdup(ttemp);
 	}
-	free(buffer);
-	return (bytes_read);
+	else
+		ft_bzero((*left), ft_strlen((*left)));
+	return (temp);
 }
 
-int				get_next_line(int const fd, char **line)
+static int		freeprogmem(char **line, char **left, int r, int ronce)
 {
-	static char	*storage = NULL;
-	char		*new_line;
-	int			bytes_read;
-
-	if ((!storage && (storage = (char *)malloc(sizeof(*storage))) == NULL)
-			|| !line || fd < 0 || BUFF_SIZE < 0)
-		return (-1);
-	new_line = ft_strchr(storage, '\n');
-	while (new_line == NULL)
+	if (r == -1)
 	{
-		bytes_read = read_to_storage(fd, &storage);
-		if (bytes_read == 0)
-		{
-			if (ft_strlen(storage) == 0)
-				return (0);
-			storage = ft_strjoin(storage, "\n");
-		}
-		if (bytes_read < 0)
-			return (-1);
-		else
-			new_line = ft_strchr(storage, '\n');
+		ft_memdel((void**)left);
+		return (-1);
 	}
-	*line = ft_strsub(storage, 0, ft_strlen(storage) - ft_strlen(new_line));
-	storage = ft_strdup(new_line + 1);
-	return (1);
+	if (r == 0 && ronce == 0)
+	{
+		ft_memdel((void**)left);
+		return (0);
+	}
+	if (ft_strlen((*line)) == 0)
+	{
+		free((*line));
+		ft_memdel((void**)left);
+		return (0);
+	}
+	else if (r >= 0)
+		return (1);
+	return (r);
+}
+
+static int		allocatemem(char **line, char **left)
+{
+	if ((*left) != NULL)
+	{
+		ft_bzero((*line), ft_strlen((*line)));
+		return (0);
+	}
+	else
+	{
+		(*line) = ft_strnew(500000);
+		if ((*line) == NULL)
+			return (1);
+		(*left) = ft_strnew(1);
+	}
+	return (0);
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	int				r;
+	static char		*left[1000];
+	char			buff[BUFF_SIZE + 1];
+	int				ronce;
+
+	if (BUFF_SIZE <= 0 || fd < 0 || line == NULL)
+		return (-1);
+	allocatemem(line, &left[fd]);
+	ronce = 0;
+	if (ft_strlen(left[fd]) > 0 && ronce++ < 500000)
+	{
+		ft_bzero((*line), ft_strlen((*line)));
+		(*line) = get_line(left[fd], &r, &left[fd], (*line));
+		if (r != -1)
+			return (1);
+		ft_bzero(left[fd], ft_strlen(left[fd]));
+	}
+	while (((r = read(fd, buff, BUFF_SIZE)) > 0) && ronce++ < 5000000)
+	{
+		buff[r] = '\0';
+		(*line) = get_line(buff, &r, &left[fd], (*line));
+		if (r != -1)
+			return (1);
+	}
+	return (freeprogmem(line, &left[fd], r, ronce));
 }

@@ -39,40 +39,41 @@ typedef struct	s_color
 
 /*typedef struct	s_sphere
 {
-	t_point		centre;
+	t_pofloat		centre;
 	char		pixel;
 	float		r;
 }				t_sphere;*/
 
 typedef struct		s_plane
 {
-	int				x;
-	int				y;
-	int				z;
-	int				a;
-	int				b;
-	int				c;
+	float			x;
+	float			y;
+	float			z;
+	float			a;
+	float			b;
+	float			c;
 	struct s_color	color;
 }					t_plane;
 
 typedef struct		s_object
 {
-	char			*name;
-	int				x;
-	int				y;
-	int				z;
-	int				r;
-	int				h;
+	char			name[20];
+	float			x;
+	float			y;
+	float			z;
+	float			r;
+	float			h;
 	char			ch;
 	struct s_color	color;
+	struct s_object	*next;
 }					t_object;
 
 typedef struct		s_light
 {
-	int				x;
-	int				y;
-	int				z;
-	int				r;
+	float			x;
+	float			y;
+	float			z;
+	float			r;
 	struct s_color	color;
 	struct s_light	*next;
 }					t_light;
@@ -88,5 +89,6 @@ typedef struct		s_scene
 //void            file_handling(char  *filename);
 int					file_okay(char *filename, t_scene *scene);
 void				add_light(t_light **head, t_light *light);
+int					save_object(char *line, t_scene *scene, char selector);
 
 #endif

@@ -45,6 +45,8 @@ int			main(int argc, char **argv)
 		ft_putendl("Usage: ./ray_tracing <map>\nInvalid file");
 		return (0);
 	}
+	ft_putendl(scene.object->name);
 	//file_handling(argv[1], &scene);
+	draw_image(scene);
 	return (0);
 }

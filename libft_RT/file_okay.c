@@ -8,9 +8,9 @@ static int	save_camera(char *line, t_scene *scene)
 	split = ft_strsplit(line, ' ');
 	if (!split[0] || !split[1] || !split[2] || split[3])
 		return (0);
-	scene->camera.x = ft_atoi(split[0]);
-	scene->camera.y = ft_atoi(split[1]);
-	scene->camera.z = ft_atoi(split[2]);
+	scene->camera.x = (float)ft_atoi(split[0]);
+	scene->camera.y = (float)ft_atoi(split[1]);
+	scene->camera.z = (float)ft_atoi(split[2]);
 	ft_freestrsplit(split);
 	return (1);
 }
@@ -22,8 +22,8 @@ static int	save_plane(char	*line, t_scene *scene)
 	split = ft_strsplit(line, ' ');
 	if (!split[0] || !split[1] || split[2])
 		return (0);
-	scene->plane.x = ft_atoi(split[0]);
-	scene->plane.y = ft_atoi(split[1]);
+	scene->plane.x = (float)ft_atoi(split[0]);
+	scene->plane.y = (float)ft_atoi(split[1]);
 	ft_freestrsplit(split);
 	return (1);
 }
@@ -38,28 +38,33 @@ static int	save_light(char *line, t_scene *scene)
 		return (0);
 	if (!(light = (t_light*)malloc(sizeof(t_light))))
 		return (0);
-	light->x = ft_atoi(split[0]);
-	light->y = ft_atoi(split[1]);
-	light->z = ft_atoi(split[2]);
-	light->r = ft_atoi(split[3]);
+	light->x = (float)ft_atoi(split[0]);
+	light->y = (float)ft_atoi(split[1]);
+	light->z = (float)ft_atoi(split[2]);
+	light->r = (float)ft_atoi(split[3]);
 	light->next = NULL;
 	add_light(&(scene->light), light);
+	ft_freestrsplit(split);
 	return (1);
 }
 
 static int	process_line(char *line, t_scene *scene)
 {
 	static char	selector = ' ';
+	char		t_selector;
 
 	if (selector != ' ')
 	{
-		if (selector == 'C')
-			return (save_camera(line, scene));
-		else if (selector == 'I')
-			return (save_plane(line, scene));
-		else if (selector == 'L')
-			return (save_light(line, scene));
+		t_selector = selector;
 		selector = ' ';
+		if (t_selector == 'C')
+			return (save_camera(line, scene));
+		else if (t_selector == 'I')
+			return (save_plane(line, scene));
+		else if (t_selector == 'L')
+			return (save_light(line, scene));
+		else
+			return (save_object(line, scene, t_selector));
 	}
 	else
 	{
@@ -67,13 +72,13 @@ static int	process_line(char *line, t_scene *scene)
 			selector = 'C';
 		else if (ft_strstr(line, "Image_Plane"))
 			selector = 'I';
-		else if (ft_strstr(line, "SPHERE"))
+		else if (ft_strstr(line, "Sphere"))
 			selector = 'S';
-		else if (ft_strstr(line, "CYLINDER"))
+		else if (ft_strstr(line, "Cylinder"))
 			selector = 'Y';
-		else if (ft_strstr(line, "CONE"))
+		else if (ft_strstr(line, "Cone"))
 			selector = 'N';
-		else if (ft_strstr(line, "Ligh_source"))
+		else if (ft_strstr(line, "Light_source"))
 			selector = 'L';
 	}
 	return (1);
@@ -91,5 +96,7 @@ int			file_okay(char *filename, t_scene *scene)
 	line = NULL;
 	while (get_next_line(fd, &line) > 0 && ret)
 		ret = process_line(line, scene);
+	if (line)
+		free(line);
 	return (ret);
 }
