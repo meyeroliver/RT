@@ -22,7 +22,7 @@ static int	save_sphere(char *line, t_scene *scene)
 	t_object *obj;
 
 	split = ft_strsplit(line, ' ');
-	if (!split[0] || !split[1] || !split[2] || !split[3])
+	if (!split[0] || !split[1] || !split[2] || !split[3] || !split[4] || split[5])
 		return (0);
 	if (!(obj = (t_object*)malloc(sizeof(t_object))))
 		return (0);
@@ -31,6 +31,7 @@ static int	save_sphere(char *line, t_scene *scene)
 	obj->y = (float)ft_atoi(split[1]);
 	obj->z = (float)ft_atoi(split[2]);
 	obj->r = (float)ft_atoi(split[3]);
+	obj->ch = split[4][0];
 	obj->next = NULL;
 	obj->h = 0;
 	add_object(&(scene->object), obj);

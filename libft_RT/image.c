@@ -14,13 +14,56 @@ static t_point	camera_point(t_camera camera)
 
 static t_point	object_point(t_object *obj)
 {
-	t_point	pnt;
+	t_point pnt;
 
 	pnt.x = obj->x;
 	pnt.y = obj->y;
 	pnt.z = obj->z;
-	pnt.ch = 'x';
+	pnt.dst = 0;
+	pnt.ch = obj->ch;
 	return (pnt);
+}
+
+static t_point	object_plane(float x, float y, char ch)
+{
+	t_point pnt;
+
+	pnt.x = x;
+	pnt.y = y;
+	pnt.z = 0;
+	pnt.dst = 0;
+	pnt.ch = ch;
+	return (pnt);
+}
+
+static t_point	*point_hit(t_object *head, t_point pnt, t_scene *scene)
+{
+	t_point		*prnt;
+	t_object	*iter;
+	t_point		obt;
+
+	iter = head;
+	prnt = NULL;
+	while (iter)
+	{
+		obt = object_point(iter);
+		obt.dst = dist_btwn_pnt_to_line(pnt,
+				scalar_mult(sub_vector(pnt,
+						camera_point(scene->camera)), 500),
+				obt);
+		if (obt.dst < iter->r)
+		{
+			if (!prnt)
+				prnt = (t_point*)ft_memdup((unsigned char*)&obt, sizeof(t_point));
+			else if (obt.dst < prnt->dst)
+			{
+				free(prnt);
+				prnt = (t_point*)ft_memdup((unsigned char*)&obt, sizeof(t_point));
+			}
+		}
+		iter = iter->next;
+	}
+	return (prnt);
 }
 
 void	draw_image(t_scene *scene)
@@ -28,43 +71,23 @@ void	draw_image(t_scene *scene)
 	int 		h;
 	int 		w;
 	t_point		pnt;
-	float		dst;
-	t_point		obt;
-	t_object	*iter;
 	t_point		*prnt;
 
 	h = -1;
-	iter = scene->object;
 	while (++h < scene->plane.y)
 	{
 		w = -1;
 		while (++w < scene->plane.x)
 		{
-			pnt.x = w;
-			pnt.y = h;
-			pnt.z = 0;
-			pnt.ch = ' ';
-			iter = scene->object;
-			prnt = NULL;
-			while (iter)
-			{
-				obt = object_point(iter);
-				dst = dist_btwn_pnt_to_line(pnt,
-					scalar_mult(sub_vector(pnt,
-							camera_point(scene->camera)), 500),
-					obt);
-				if (dst < iter->r)
-					prnt = (t_point*)ft_memdup((unsigned char*)&obt, sizeof(t_point));
-				iter = iter->next;
-			}
-			//if (dst < scene->object->r)
+			pnt = object_plane(w, h, scene->plane.ch);
+			prnt = point_hit(scene->object, pnt, scene);
 			if (prnt)
 			{
 				ft_putchar(prnt->ch);
 				free(prnt);
 			}
 			else
-				ft_putchar(' ');
+				ft_putchar(pnt.ch);
 		}
 		ft_putchar('\n');
 	}

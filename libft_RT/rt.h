@@ -33,6 +33,7 @@ typedef	struct	s_point
 	float		x;
 	float		y;
 	float		z;
+	float		dst;
 	char		ch;
 }				t_point;
 
@@ -60,6 +61,7 @@ typedef struct		s_plane
 	float			a;
 	float			b;
 	float			c;
+	char			ch;
 	struct s_color	color;
 }					t_plane;
 
@@ -82,6 +84,7 @@ typedef struct		s_light
 	float			y;
 	float			z;
 	float			r;
+	char			ch;
 	struct s_color	color;
 	struct s_light	*next;
 }					t_light;
@@ -104,5 +107,6 @@ t_point				cross_product(t_point v1, t_point v2);
 float				magnitude(t_point v1);
 t_point				scalar_mult(t_point v1, float k);
 float				dist_btwn_pnt_to_line(t_point v1, t_point v2, t_point v0);
+void				free_all_mem(t_scene *scene);
 
 #endif

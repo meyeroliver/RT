@@ -3,10 +3,12 @@ Scene My_World_1
 Camera
 37 13 40
 Image_plane
-70 50
+150 50 -
 Light_source
-140 10 -2 5
+140 10 -2 5 *
 Sphere
-20 40 -100 50
+20 40 -100 50 #
 Sphere
-10 70 -100 40
+10 70 -50 50 %
+Sphere
+70 95 -75 70 !

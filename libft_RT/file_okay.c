@@ -22,10 +22,11 @@ static int	save_plane(char	*line, t_scene *scene)
 
 	if (!(split = ft_strsplit(line, ' ')))
 		return (0);
-	if (!split[0] || !split[1] || split[2])
+	if (!split[0] || !split[1] || !split[2] || split[3])
 		return (0);
 	scene->plane.x = (float)ft_atoi(split[0]);
 	scene->plane.y = (float)ft_atoi(split[1]);
+	scene->plane.ch = split[2][0];
 	ft_freestrsplit(split);
 	if (scene->plane.x == 0 || scene->plane.y == 0)
 		return (0);
@@ -39,7 +40,7 @@ static int	save_light(char *line, t_scene *scene)
 
 	if (!(split = ft_strsplit(line, ' ')))
 		return (0);
-	if (!split[0] || !split[1] || !split[2] || !split[3] || split[4])
+	if (!split[0] || !split[1] || !split[2] || !split[3] || !split[4] || split[5])
 		return (0);
 	if (!(light = (t_light*)malloc(sizeof(t_light))))
 		return (0);
@@ -47,6 +48,7 @@ static int	save_light(char *line, t_scene *scene)
 	light->y = (float)ft_atoi(split[1]);
 	light->z = (float)ft_atoi(split[2]);
 	light->r = (float)ft_atoi(split[3]);
+	light->ch = split[4][0];
 	light->next = NULL;
 	add_light(&(scene->light), light);
 	ft_freestrsplit(split);
