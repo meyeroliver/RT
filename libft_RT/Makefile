@@ -12,9 +12,9 @@
 
 NAME = ray_tracing
 
-SRC = main.c file_okay.c light.c ft_objects.c
+SRC = main.c file_okay.c light.c ft_objects.c image.c rt_math.c
 
-OBJ = main.o file_okay.o light.o ft_objects.o
+OBJ = main.o file_okay.o light.o ft_objects.o image.o rt_math.o
 
 FLAGS = -Wall -Wextra -Werror 
 

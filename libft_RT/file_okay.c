@@ -5,7 +5,8 @@ static int	save_camera(char *line, t_scene *scene)
 {
 	char	**split;
 
-	split = ft_strsplit(line, ' ');
+	if (!(split = ft_strsplit(line, ' ')))
+		return (0);
 	if (!split[0] || !split[1] || !split[2] || split[3])
 		return (0);
 	scene->camera.x = (float)ft_atoi(split[0]);
@@ -19,12 +20,15 @@ static int	save_plane(char	*line, t_scene *scene)
 {
 	char **split;
 
-	split = ft_strsplit(line, ' ');
+	if (!(split = ft_strsplit(line, ' ')))
+		return (0);
 	if (!split[0] || !split[1] || split[2])
 		return (0);
 	scene->plane.x = (float)ft_atoi(split[0]);
 	scene->plane.y = (float)ft_atoi(split[1]);
 	ft_freestrsplit(split);
+	if (scene->plane.x == 0 || scene->plane.y == 0)
+		return (0);
 	return (1);
 }
 
@@ -33,7 +37,8 @@ static int	save_light(char *line, t_scene *scene)
 	char 	**split;
 	t_light	*light;	
 
-	split = ft_strsplit(line, ' ');
+	if (!(split = ft_strsplit(line, ' ')))
+		return (0);
 	if (!split[0] || !split[1] || !split[2] || !split[3] || split[4])
 		return (0);
 	if (!(light = (t_light*)malloc(sizeof(t_light))))
@@ -70,7 +75,7 @@ static int	process_line(char *line, t_scene *scene)
 	{
 		if (ft_strstr(line, "Camera"))
 			selector = 'C';
-		else if (ft_strstr(line, "Image_Plane"))
+		else if (ft_strstr(line, "Image_plane"))
 			selector = 'I';
 		else if (ft_strstr(line, "Sphere"))
 			selector = 'S';

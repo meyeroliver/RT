@@ -28,6 +28,14 @@ typedef struct	s_camera
 	float		z;
 }				t_camera;
 
+typedef	struct	s_point
+{
+	float		x;
+	float		y;
+	float		z;
+	char		ch;
+}				t_point;
+
 typedef struct	s_color
 {
 	int			r;
@@ -90,5 +98,11 @@ typedef struct		s_scene
 int					file_okay(char *filename, t_scene *scene);
 void				add_light(t_light **head, t_light *light);
 int					save_object(char *line, t_scene *scene, char selector);
+void				draw_image(t_scene *scene);
+t_point				sub_vector(t_point v1, t_point v2);
+t_point				cross_product(t_point v1, t_point v2);
+float				magnitude(t_point v1);
+t_point				scalar_mult(t_point v1, float k);
+float				dist_btwn_pnt_to_line(t_point v1, t_point v2, t_point v0);
 
 #endif
