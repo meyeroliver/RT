@@ -23,7 +23,6 @@ static t_point	object_point(t_object *obj)
 	return (pnt);
 }
 
-
 void	draw_image(t_scene *scene)
 {
 	int 		h;
@@ -31,12 +30,11 @@ void	draw_image(t_scene *scene)
 	t_point		pnt;
 	float		dst;
 	t_point		obt;
+	t_object	*iter;
+	t_point		*prnt;
 
 	h = -1;
-	ft_putnbr(scene->plane.y);
-	ft_putchar(' ');
-	ft_putnbr(scene->plane.x);
-	ft_putchar('\n');
+	iter = scene->object;
 	while (++h < scene->plane.y)
 	{
 		w = -1;
@@ -46,13 +44,25 @@ void	draw_image(t_scene *scene)
 			pnt.y = h;
 			pnt.z = 0;
 			pnt.ch = ' ';
-			obt = object_point(scene->object);
-			dst = dist_btwn_pnt_to_line(pnt,
+			iter = scene->object;
+			prnt = NULL;
+			while (iter)
+			{
+				obt = object_point(iter);
+				dst = dist_btwn_pnt_to_line(pnt,
 					scalar_mult(sub_vector(pnt,
 							camera_point(scene->camera)), 500),
 					obt);
-			if (dst < scene->object->r)
-				ft_putchar(obt.ch);
+				if (dst < iter->r)
+					prnt = (t_point*)ft_memdup((unsigned char*)&obt, sizeof(t_point));
+				iter = iter->next;
+			}
+			//if (dst < scene->object->r)
+			if (prnt)
+			{
+				ft_putchar(prnt->ch);
+				free(prnt);
+			}
 			else
 				ft_putchar(' ');
 		}

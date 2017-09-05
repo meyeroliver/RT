@@ -69,7 +69,8 @@ SRC = get_next_line.c		\
 	  ft_strjoin.c			\
 	  ft_strsplit.c			\
 	  ft_strstr.c			\
-	  ft_freestrsplit.c		
+	  ft_freestrsplit.c		\
+	  ft_memdup.c
 
 SRCO = get_next_line.o		\
 	   ft_memset.o			\
@@ -127,7 +128,8 @@ SRCO = get_next_line.o		\
 	   ft_strjoin.o			\
 	   ft_strsplit.o		\
 	   ft_strstr.o			\
-	   ft_freestrsplit.o	
+	   ft_freestrsplit.o	\
+	   ft_memdup.o
 
 CFLAGS = -Wall -Wextra -Werror
 

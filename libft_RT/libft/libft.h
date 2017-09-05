@@ -79,5 +79,6 @@ void	ft_putendl_fd(char const *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 int		get_next_line(int fd, char **line);
 void	ft_freestrsplit(char **split);
+unsigned char	*ft_memdup(const unsigned char *dat, size_t len);
 
 #endif
