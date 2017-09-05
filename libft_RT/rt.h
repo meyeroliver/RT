@@ -18,14 +18,15 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "libft/libft.h"
 
-typedef struct	s_point
+typedef struct	s_camera
 {
 	float		x;
 	float		y;
 	float		z;
-}				t_point;
+}				t_camera;
 
 typedef struct	s_color
 {
@@ -36,13 +37,56 @@ typedef struct	s_color
 
 // create an object struct that will work with parametric equation
 
-typedef struct	s_sphere
+/*typedef struct	s_sphere
 {
 	t_point		centre;
 	char		pixel;
 	float		r;
-}				t_sphere;
+}				t_sphere;*/
 
-void            file_handling(char  *filename);
+typedef struct		s_plane
+{
+	int				x;
+	int				y;
+	int				z;
+	int				a;
+	int				b;
+	int				c;
+	struct s_color	color;
+}					t_plane;
+
+typedef struct		s_object
+{
+	char			*name;
+	int				x;
+	int				y;
+	int				z;
+	int				r;
+	int				h;
+	char			ch;
+	struct s_color	color;
+}					t_object;
+
+typedef struct		s_light
+{
+	int				x;
+	int				y;
+	int				z;
+	int				r;
+	struct s_color	color;
+	struct s_light	*next;
+}					t_light;
+
+typedef struct		s_scene
+{
+	struct s_camera	camera;
+	struct s_plane	plane;
+	struct s_light	*light;
+	struct s_object	*object;
+}					t_scene;
+
+//void            file_handling(char  *filename);
+int					file_okay(char *filename, t_scene *scene);
+void				add_light(t_light **head, t_light *light);
 
 #endif

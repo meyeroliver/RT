@@ -12,19 +12,21 @@
 
 NAME = ray_tracing
 
-SRC = main.c file_handling.c
+SRC = main.c file_okay.c light.c
 
-OBJ = main.o file_handling.o
+OBJ = main.o file_okay.o light.o
 
 FLAGS = -Wall -Wextra -Werror 
 
 FETCHLIB = -L libft/ -lft
 
+MATHLIB = -lm
+
 all: $(NAME)
 
 $(NAME):
 	@$(MAKE) -C libft/ all
-	@gcc -o $(NAME) $(SRC) $(FLAGS) $(FETCHLIB)
+	@gcc -o $(NAME) $(SRC) $(FLAGS) $(FETCHLIB) $(MATHLIB)
 
 clean:
 	@$(MAKE) -C libft/ clean

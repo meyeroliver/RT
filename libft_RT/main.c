@@ -12,10 +12,39 @@
 
 #include "rt.h"
 
-int		main(int argc, char **argv)
+static void	initialize_scene(t_scene *scene)
 {
+	scene->camera.x = 0;
+	scene->camera.y = 0;
+	scene->camera.z = 0;
+	scene->light = NULL;
+	scene->object = NULL;
+	scene->plane.x = 0;
+	scene->plane.y = 0;
+	scene->plane.z = 0;
+	scene->plane.a = 0;
+	scene->plane.b = 0;
+	scene->plane.c = 0;
+	scene->plane.color.r = 0;
+	scene->plane.color.g = 0;
+	scene->plane.color.b = 0;
+}
+
+int			main(int argc, char **argv)
+{
+	t_scene	scene;
+
+	initialize_scene(&scene);
 	if (argc - 1 != 1)
+	{
+		ft_putendl("usage: ./ray_tracing <map>");
 		return (0);
-	file_handling(argv[1]);
+	}
+	if (!file_okay(argv[1], &scene))
+	{
+		ft_putendl("Usage: ./ray_tracing <map>\nInvalid file");
+		return (0);
+	}
+	//file_handling(argv[1], &scene);
 	return (0);
 }
