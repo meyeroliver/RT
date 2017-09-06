@@ -8,7 +8,7 @@ static t_point	camera_point(t_camera camera)
 	pnt.x = camera.x;
 	pnt.y = camera.y;
 	pnt.z = camera.z;
-	pnt.ch = ' ';
+	pnt.ch = ' '; // the camera shouldnt have a "color"
 	return (pnt);
 }
 
@@ -32,7 +32,9 @@ static t_point	object_plane(float x, float y, char ch)
 	pnt.y = y;
 	pnt.z = 0;
 	pnt.dst = 0;
+	ch = ' ';
 	pnt.ch = ch;
+
 	return (pnt);
 }
 
@@ -41,28 +43,41 @@ static t_point	*point_hit(t_object *head, t_point pnt, t_scene *scene)
 	t_point		*prnt;
 	t_object	*iter;
 	t_point		obt;
+	float		min_length;
+	float		length;
 
 	iter = head;
 	prnt = NULL;
+	min_length = MAX;
 	while (iter)
 	{
 		obt = object_point(iter);
 		obt.dst = dist_btwn_pnt_to_line(pnt,
 				scalar_mult(sub_vector(pnt,
-						camera_point(scene->camera)), 500),
+						camera_point(scene->camera)), MAX),
 				obt);
-		if (obt.dst < iter->r)
+		///////////////////////////////////////////////////////////////
+		length = hit_len(scene->camera, obt, obt.dst);
+		if (length <  min_length)
 		{
-			if (!prnt)
-				prnt = (t_point*)ft_memdup((unsigned char*)&obt, sizeof(t_point));
-			else if (obt.dst < prnt->dst)
+			///////////////////////////////////////////////////////////////
+			if (obt.dst < iter->r)
 			{
-				free(prnt);
-				prnt = (t_point*)ft_memdup((unsigned char*)&obt, sizeof(t_point));
+				if (!prnt)
+					prnt = (t_point*)ft_memdup((unsigned char*)&obt, sizeof(t_point));
+				else if (obt.dst < prnt->dst)
+				{
+					free(prnt);
+					prnt = (t_point*)ft_memdup((unsigned char*)&obt, sizeof(t_point));
+				}
 			}
+			min_length = length;
 		}
 		iter = iter->next;
 	}
+	/////////////////////////////////////////////////////////////////////
+	//this is where the color calculations must occur
+	/////////////////////////////////////////////////////////////////////
 	return (prnt);
 }
 
