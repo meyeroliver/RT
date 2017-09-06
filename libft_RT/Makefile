@@ -6,15 +6,17 @@
 #    By: omeyer <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/07/02 14:51:42 by omeyer            #+#    #+#              #
-#    Updated: 2017/08/28 09:39:58 by omeyer           ###   ########.fr        #
+#    Updated: 2017/09/06 09:31:54 by omeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ray_tracing
 
-SRC = main.c file_okay.c light.c ft_objects.c image.c rt_math.c mem.c
+SRC = main.c file_okay.c light.c ft_objects.c image.c rt_math.c rt_math1.c \
+	  mem.c
 
-OBJ = main.o file_okay.o light.o ft_objects.o image.o rt_math.o mem.o
+OBJ = main.o file_okay.o light.o ft_objects.o image.o rt_math.o rt_math1.o \
+	  mem.o
 
 FLAGS = -Wall -Wextra -Werror 
 

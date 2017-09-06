@@ -57,7 +57,7 @@ static t_point	*point_hit(t_object *head, t_point pnt, t_scene *scene)
 						camera_point(scene->camera)), MAX),
 				obt);
 		///////////////////////////////////////////////////////////////
-		length = hit_len(scene->camera, obt, obt.dst);
+		length = hit_length(scene->camera, *iter, obt.dst);
 		if (length <  min_length)
 		{
 			///////////////////////////////////////////////////////////////

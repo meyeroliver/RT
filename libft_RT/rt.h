@@ -6,7 +6,7 @@
 /*   By: omeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 13:20:51 by omeyer            #+#    #+#             */
-/*   Updated: 2017/09/06 08:11:20 by omeyer           ###   ########.fr       */
+/*   Updated: 2017/09/06 09:43:03 by omeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,7 @@ float				magnitude(t_point v1);
 t_point				scalar_mult(t_point v1, float k);
 float				dist_btwn_pnt_to_line(t_point v1, t_point v2, t_point v0);
 void				free_all_mem(t_scene *scene);
+float				dist_btwn_to_points(t_camera cam, t_object obt);
+float				hit_length(t_camera camera, t_object obt, float perp_dist);
 
 #endif
